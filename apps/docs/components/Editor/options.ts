@@ -1,0 +1,18 @@
+// Editor options
+export const options = {
+  autofocus: true,
+
+  /**
+   * onReady callback
+   */
+  onReady: () => {
+    console.count("READY callback");
+  },
+
+  /**
+   * onChange callback
+   */
+  onChange: () => {
+    console.count("CHANGE callback");
+  },
+};
