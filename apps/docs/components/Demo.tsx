@@ -1,6 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
+import { Button, NavLink } from "@mantine/core";
+import { Image, UserPlus, Video } from "lucide-react";
 
 import classes from "./Demo.module.css";
 import {
@@ -10,9 +13,6 @@ import {
   useSetData,
   useClearDataCallback,
 } from "./Editor";
-import { useState } from "react";
-import { Button, NavLink } from "@mantine/core";
-import { Image, UserPlus, Video } from "lucide-react";
 
 const Editor = dynamic<{
   editorRef: any;
@@ -22,7 +22,7 @@ const Editor = dynamic<{
 }>(
   () =>
     import("../components/Editor/editor").then((mod) => mod.EditorContainer),
-  { ssr: false }
+  { ssr: false, loading: () => <p>Loading ...</p> }
 );
 
 const navLink = [
@@ -51,6 +51,7 @@ const navLink = [
 
 function Demo() {
   const [editor, setEditor] = useState(null);
+
   // save handler
   const onSave = useSaveCallback(editor);
 
@@ -65,10 +66,14 @@ function Demo() {
 
   const disabled = editor === null || loading;
 
+  console.log("editor", { editor });
+
   return (
     <div className={classes.DemoWrapper}>
       <div className="editorContainer">
-        <Editor editorRef={setEditor} options={options} data={data}></Editor>
+        {Editor && (
+          <Editor editorRef={setEditor} options={options} data={data}></Editor>
+        )}
         <div>
           {navLink &&
             navLink.map((item) => {

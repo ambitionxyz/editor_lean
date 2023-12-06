@@ -1,12 +1,38 @@
 {
-  "time": 1552744582955,
+  "time": 1587670998983,
   "blocks": [
     {
-      "type": "image",
+      "id": "oUq2g_tl8y",
+      "type": "paragraph",
       "data": {
-        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2jcR7wnaZGU2r5wWBBu6n9Ew8pj-hoT2edw&usqp=CAU"
+        "text": "Paragraph with some <b>bold</b>&nbsp;text. And <a href=\"https://google.com\">some</a> <i>italic</i>&nbsp;text."
+      }
+    },
+    {
+      "id": "oUq2g_tl8q",
+      "type": "paragraph",
+      "data": {
+        "text": "A lovely editor I must say."
+      }
+    },
+    {
+      "id": "oUq2g_tlwy",
+      "type": "paragraph",
+      "data": {
+        "text": "Save new data."
+      }
+    },
+    {
+      "id": "oUq2g_tl81",
+      "type": "simpleImage",
+      "data": {
+        "url": "https://thedriven.io/wp-content/uploads/2020/01/Model-Y-Side-Blue.jpg",
+        "caption": "Paste image URL",
+        "withBorder": false,
+        "withBackground": false,  
+        "stretched": true
       }
     }
   ],
-  "version": "2.11.10"
+  "version": "2.28.2"
 }

@@ -24,11 +24,10 @@ export const useEditor = (
     // create instance
     const editor = new EditorJS({
       holder: "editorjs",
-      autofocus: true,
       tools: toolsList,
       data: data || {},
 
-      defaultBlock: "image",
+      initialBlock: "paragraph",
       ...editorOptions,
     });
 
@@ -52,7 +51,7 @@ export const useEditor = (
     }
     // Send instance to the parent
     if (editorRef) {
-      console.log("editorRef", editorRef);
+      console.log("editorRef", { editorInstance });
       editorRef(editorInstance);
     }
   }, [editorInstance, editorRef]);
@@ -80,7 +79,7 @@ export const EditorContainer = ({
       <style jsx>{`
         .container {
           width: 100%;
-          min-height: 500px;
+          /* height: 50px; */
           border: 1px solid #c0c0c0;
           padding: 2px 0;
         }

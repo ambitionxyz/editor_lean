@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
+
 import initialData from "./data.json";
 
 export const dataKey = "editorData";
@@ -41,27 +42,30 @@ export const useLoadData = () => {
 
   // Mimic async data load
   useEffect(() => {
-    setLoading(true);
-    const id = setTimeout(() => {
-      console.group("EDITOR load data");
-      const saved = localStorage.getItem(dataKey);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setData(parsed);
-        console.dir(parsed);
-      } else {
-        console.info("No saved data, using initial");
-        console.dir(initialData);
-        setData(initialData);
-      }
-      console.groupEnd();
-      setLoading(false);
-    }, 200);
+    if (typeof window !== "undefined") {
+      setLoading(true);
+      const id = setTimeout(() => {
+        console.group("EDITOR load data");
+        const saved = localStorage.getItem(dataKey);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          setData(parsed);
+          console.dir(parsed);
+        } else {
+          console.info("No saved data, using initial");
+          console.dir(initialData);
+          // setData(initialData);
+          setData(null);
+        }
+        console.groupEnd();
+        setLoading(false);
+      }, 200);
 
-    return () => {
-      setLoading(false);
-      clearTimeout(id);
-    };
+      return () => {
+        setLoading(false);
+        clearTimeout(id);
+      };
+    }
   }, []);
 
   return { data, loading };
