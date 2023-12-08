@@ -25,7 +25,8 @@
     "next": "^14.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "uploadthing": "^6.0.4"
+    "uploadthing": "^6.0.4",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.2",

@@ -1,17 +1,20 @@
 import { useCallback, useState, useEffect } from "react";
 
 import initialData from "./data.json";
-
-export const dataKey = "editorData";
+import { useLocal } from "../../hooks/useLocal";
+import useStore from "../../hooks/useStore";
 
 export const useSaveCallback = (editor: any) => {
+  const { addLocal } = useLocal();
+
   return useCallback(async () => {
     if (!editor) return;
     try {
       const out = await editor.save();
       console.group("EDITOR onSave");
       console.dir(out);
-      localStorage.setItem(dataKey, JSON.stringify(out));
+      addLocal(out);
+      // localStorage.setItem(dataKey, JSON.stringify(out));
       console.info("Saved in localStorage");
       console.groupEnd();
     } catch (e) {
@@ -37,6 +40,7 @@ export const useSetData = (editor: any, data: any) => {
 
 // load saved data
 export const useLoadData = () => {
+  const { dataStore } = useLocal();
   const [data, setData] = useState<object | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -46,9 +50,9 @@ export const useLoadData = () => {
       setLoading(true);
       const id = setTimeout(() => {
         console.group("EDITOR load data");
-        const saved = localStorage.getItem(dataKey);
+        const saved = dataStore;
         if (saved) {
-          const parsed = JSON.parse(saved);
+          const parsed = dataStore;
           setData(parsed);
           console.dir(parsed);
         } else {

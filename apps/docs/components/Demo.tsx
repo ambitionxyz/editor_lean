@@ -12,7 +12,7 @@ import {
   useSaveCallback,
   useSetData,
   useClearDataCallback,
-} from "./Editor";
+} from "./editor";
 
 const Editor = dynamic<{
   editorRef: any;
@@ -21,7 +21,7 @@ const Editor = dynamic<{
   options: any;
 }>(
   () =>
-    import("../components/Editor/editor").then((mod) => mod.EditorContainer),
+    import("./editor/editor").then((mod) => mod.EditorContainer),
   { ssr: false, loading: () => <p>Loading ...</p> }
 );
 
