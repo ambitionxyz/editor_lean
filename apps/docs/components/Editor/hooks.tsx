@@ -1,8 +1,10 @@
 import { useCallback, useState, useEffect } from "react";
+import { isEmpty } from "lodash";
 
 import initialData from "./data.json";
 import { useLocal } from "../../hooks/useLocal";
-import useStore from "../../hooks/useStore";
+
+export const dataKey = "editorData";
 
 export const useSaveCallback = (editor: any) => {
   const { addLocal } = useLocal();
@@ -50,14 +52,21 @@ export const useLoadData = () => {
       setLoading(true);
       const id = setTimeout(() => {
         console.group("EDITOR load data");
+        // const saved = localStorage.getItem(dataKey);
         const saved = dataStore;
         if (saved) {
           const parsed = dataStore;
-          setData(parsed);
+          // const parsed = JSON.parse(saved);
+          console.log("parsed:  ", parsed);
+          if (parsed?.blocks?.length === 0 || isEmpty(parsed)) {
+            setData(null);
+          } else {
+            setData(parsed);
+          }
           console.dir(parsed);
         } else {
           console.info("No saved data, using initial");
-          console.dir(initialData);
+          // console.dir(initialData);
           // setData(initialData);
           setData(null);
         }

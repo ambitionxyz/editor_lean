@@ -26,8 +26,7 @@ export const useEditor = (
       holder: "editorjs",
       tools: toolsList,
       data: data || {},
-
-      initialBlock: "paragraph",
+      initialBlock: "timeline",
       ...editorOptions,
     });
 
@@ -79,8 +78,6 @@ export const EditorContainer = ({
       <style jsx>{`
         .container {
           width: 100%;
-          /* height: 50px; */
-          border: 1px solid #c0c0c0;
           padding: 2px 0;
         }
       `}</style>
