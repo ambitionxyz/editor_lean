@@ -17,16 +17,20 @@ const TimelineItemE = ({
 }: TimelineItemProps) => {
   const { dataItem, itemCreated } = data;
 
+  const renderTime = itemCreated
+    ? itemCreated
+    : new Date().toLocaleTimeString();
   return (
-    <li className={classes.item}>
-      <div className={classes.time}>{itemCreated}</div>
+    <div className={classes.item}>
+      <div className={classes.time}>{renderTime}</div>
       <input
         type="text"
+        className={classes.content}
         defaultValue={dataItem}
         onChange={onDataChange}
         onKeyDown={onKeyDown}
       />
-    </li>
+    </div>
   );
 };
 

@@ -11,7 +11,6 @@ export const useLocal = create<ILocalStore>()(
     (set, get) => ({
       dataStore: {},
       addLocal: (data: any) => set({ dataStore: data }),
-      clearStorage: () => persist,
     }),
     {
       name: "editorData",

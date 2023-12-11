@@ -42,7 +42,6 @@ export class TimeLineBlock {
         itemCreated: new Date().toLocaleTimeString(),
         readOnly: false,
       };
-
       this.data = {
         ...newData,
       };
