@@ -8,12 +8,12 @@ import Paragraph from "@editorjs/paragraph";
 import { TimeLineBlock } from "../customBock/TimeLineBlock";
 
 export const tools = {
-  paragraph: {
-    class: Paragraph,
-    inlineToolbar: true,
-  },
+  // paragraph: {
+  //   class: Paragraph,
+  //   inlineToolbar: true,
+  // },
   // simpleImage: SimpleImage,
-  quote: Quote,
+  // quote: Quote,
   // header: {
   //   class: Header,
   //   inlineToolbar: ["link"],
@@ -52,7 +52,7 @@ export const tools = {
   //     },
   //   },
   // },
-  embed: Embed,
+  // embed: Embed,
   timeline: TimeLineBlock,
   // paragraph: CustomParap,
   // image: CustomImage,

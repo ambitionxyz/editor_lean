@@ -13,7 +13,11 @@ export const options = {
   /**
    * onChange callback
    */
-  onChange: () => {
-    console.count("CHANGE callback");
+  onChange: (api: any, event: any) => {
+    if (event.length > 1 && event[1].type === "block-added") {
+      const idBlockRemove = event[1].detail.index;
+      console.log({ idBlockRemove });
+      api.blocks.delete(idBlockRemove);
+    }
   },
 };

@@ -2,7 +2,9 @@
 
 import EditorJS, { ToolConstructable, ToolSettings } from "@editorjs/editorjs";
 import React, { useEffect, useState } from "react";
+
 import { tools } from "./tools";
+import classes from "./edittor.module.css";
 
 export const useEditor = (
   toolsList: {
@@ -73,14 +75,8 @@ export const EditorContainer = ({
 
   return (
     <>
-      {!children && <div className="container" id="editorjs"></div>}
+      {!children && <div className={classes.sessions} id="editorjs"></div>}
       {children}
-      <style jsx>{`
-        .container {
-          width: 100%;
-          padding: 2px 0;
-        }
-      `}</style>
     </>
   );
 };

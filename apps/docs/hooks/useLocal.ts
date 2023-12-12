@@ -13,7 +13,7 @@ export const useLocal = create<ILocalStore>()(
       addLocal: (data: any) => set({ dataStore: data }),
     }),
     {
-      name: "editorData",
+      name: "editorData1233",
       storage: createJSONStorage(() => sessionStorage),
     }
   )

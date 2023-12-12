@@ -8,13 +8,32 @@ export const dataKey = "editorData";
 
 export const useSaveCallback = (editor: any) => {
   const { addLocal } = useLocal();
-
   return useCallback(async () => {
     if (!editor) return;
     try {
       const out = await editor.save();
       console.group("EDITOR onSave");
       console.dir(out);
+
+      console.log(
+        "===>",
+        JSON.stringify({
+          data: out,
+          meta: {},
+        })
+      );
+
+      await fetch("http://localhost:1337/api/components/1", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: out,
+          meta: {},
+        }),
+      });
+
       addLocal(out);
       // localStorage.setItem(dataKey, JSON.stringify(out));
       console.info("Saved in localStorage");
@@ -50,27 +69,27 @@ export const useLoadData = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setLoading(true);
-      const id = setTimeout(() => {
+      const id = setTimeout(async () => {
         console.group("EDITOR load data");
         // const saved = localStorage.getItem(dataKey);
         const saved = dataStore;
-        if (saved) {
-          const parsed = dataStore;
-          // const parsed = JSON.parse(saved);
-          console.log("parsed:  ", parsed);
-          if (parsed?.blocks?.length === 0 || isEmpty(parsed)) {
-            setData(null);
-          } else {
-            setData(parsed);
-          }
-          console.dir(parsed);
-        } else {
+        
+        if (isEmpty(saved)) {
+          console.info("No saved data, fetching API...");
+          const res = await (
+            await fetch("http://localhost:1337/api/components/1")
+          ).json();
+          const data = res.data.attributes;
+          setData(data);
+        } else if (saved?.blocks?.length === 0) {
           console.info("No saved data, using initial");
           // console.dir(initialData);
           // setData(initialData);
           setData(null);
+        } else {
+          setData(saved);
         }
-        console.groupEnd();
+
         setLoading(false);
       }, 200);
 
@@ -79,7 +98,7 @@ export const useLoadData = () => {
         clearTimeout(id);
       };
     }
-  }, []);
+  }, [dataStore]);
 
   return { data, loading };
 };
