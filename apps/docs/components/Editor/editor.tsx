@@ -25,10 +25,10 @@ export const useEditor = (
   useEffect(() => {
     // create instance
     const editor = new EditorJS({
-      holder: "editorjs",
+      holder: "editorjs2",
       tools: toolsList,
       data: data || {},
-      initialBlock: "timeline",
+      initialBlock: "paragraph",
       ...editorOptions,
     });
 
@@ -75,7 +75,7 @@ export const EditorContainer = ({
 
   return (
     <>
-      {!children && <div className={classes.sessions} id="editorjs"></div>}
+      {!children && <div className={classes.sessions} id="editorjs2"></div>}
       {children}
     </>
   );

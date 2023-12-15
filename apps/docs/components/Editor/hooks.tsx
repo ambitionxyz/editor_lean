@@ -3,45 +3,55 @@ import { isEmpty } from "lodash";
 
 import initialData from "./data.json";
 import { useLocal } from "../../hooks/useLocal";
+import { useData } from "../../hooks/useData";
+import { useModal } from "../../hooks/useModal";
 
 export const dataKey = "editorData";
 
-export const useSaveCallback = (editor: any) => {
-  const { addLocal } = useLocal();
+type SaveType = "create" | "edit";
+
+export const useSaveCallback = (editor: any, type: SaveType, callBack: any) => {
+  const { onClose } = useModal();
+
   return useCallback(async () => {
     if (!editor) return;
     try {
       const out = await editor.save();
+      const currenTime = new Date().toLocaleTimeString();
       console.group("EDITOR onSave");
       console.dir(out);
 
-      console.log(
-        "===>",
-        JSON.stringify({
-          data: out,
-          meta: {},
-        })
-      );
+      if (out.blocks.length === 0) {
+        onClose();
+        return;
+      }
 
-      await fetch("http://localhost:1337/api/components/1", {
-        method: "PUT",
+      const dataPost = {
+        createTime: currenTime,
+        content: out.blocks[0].data.text,
+      };
+
+      const res = await fetch("http://localhost:1337/api/posts", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          data: out,
+          data: dataPost,
           meta: {},
         }),
       });
 
-      addLocal(out);
-      // localStorage.setItem(dataKey, JSON.stringify(out));
-      console.info("Saved in localStorage");
-      console.groupEnd();
+      if (!res.ok) {
+        console.log("ERRORR POST");
+      }
+      const data = await res.json();
+      callBack(data.data);
+      onClose();
     } catch (e) {
       console.error("SAVE RESULT failed", e);
     }
-  }, [editor]);
+  }, [editor, type, callBack]);
 };
 
 // Set editor data after initializing
@@ -73,7 +83,7 @@ export const useLoadData = () => {
         console.group("EDITOR load data");
         // const saved = localStorage.getItem(dataKey);
         const saved = dataStore;
-        
+
         if (isEmpty(saved)) {
           console.info("No saved data, fetching API...");
           const res = await (
@@ -83,7 +93,7 @@ export const useLoadData = () => {
           setData(data);
         } else if (saved?.blocks?.length === 0) {
           console.info("No saved data, using initial");
-          // console.dir(initialData);
+
           // setData(initialData);
           setData(null);
         } else {

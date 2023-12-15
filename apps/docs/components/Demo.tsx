@@ -19,11 +19,10 @@ const Editor = dynamic<{
   children?: any;
   data: any;
   options: any;
-}>(
-  () =>
-    import("./editor/editor").then((mod) => mod.EditorContainer),
-  { ssr: false, loading: () => <p>Loading ...</p> }
-);
+}>(() => import("./editor/editor").then((mod) => mod.EditorContainer), {
+  ssr: false,
+  loading: () => <p>Loading ...</p>,
+});
 
 const navLink = [
   {
@@ -53,7 +52,7 @@ function Demo() {
   const [editor, setEditor] = useState(null);
 
   // save handler
-  const onSave = useSaveCallback(editor);
+  const onSave = useSaveCallback(editor, "create", () => {});
 
   // load data
   const { data, loading } = useLoadData();

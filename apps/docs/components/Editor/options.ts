@@ -1,6 +1,6 @@
 // Editor options
 export const options = {
-  placeholder: "Enter for new paragraph",
+  placeholder: "Đang nghĩ gì vậy fence",
   autofocus: true,
 
   /**
