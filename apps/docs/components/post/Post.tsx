@@ -3,13 +3,44 @@ import Image from "next/image";
 
 interface PostProps {
   avartar?: string;
-  image?: string;
+  images?: any;
   name?: string;
   createTime?: string;
   content?: string;
 }
 
-const Post = ({ avartar, image, name, content, createTime }: PostProps) => {
+const ImageList = ({ images }: { images: any[] }) => {
+  if (images.length === 0) {
+    return <></>;
+  } else if (images.length === 1) {
+    return (
+      <div className="overflow-hidden pt-[12px]">
+        <img
+          className="object-fill  h-full w-full"
+          src={images[0]}
+          alt="image"
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className="overflow-hidden pt-[12px]">
+        {images.map((image, key) => {
+          return (
+            <img
+              key={key}
+              className="object-fill  h-full w-full"
+              src={image}
+              alt="image"
+            />
+          );
+        })}
+      </div>
+    );
+  }
+};
+
+const Post = ({ avartar, images, name, content, createTime }: PostProps) => {
   return (
     <div className="rounded-md w-full  bg-slate-600 mb-6">
       <div className=" h-[36px] w-full pt-[12px] px-[16px] mb-[12px]">
@@ -41,12 +72,8 @@ const Post = ({ avartar, image, name, content, createTime }: PostProps) => {
           </div>
         </div>
       </div>
-      <div className="pt-[12px] px-[16px]">{content}</div>
-      {image && (
-        <div className="overflow-hidden">
-          <img className="object-fill  h-full w-full" src={image} alt="image" />
-        </div>
-      )}
+      {content && <div className="pt-[12px] px-[16px]">{content}</div>}
+      <ImageList images={images} />
     </div>
   );
 };

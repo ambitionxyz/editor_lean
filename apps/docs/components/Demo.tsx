@@ -52,7 +52,7 @@ function Demo() {
   const [editor, setEditor] = useState(null);
 
   // save handler
-  const onSave = useSaveCallback(editor, "create", () => {});
+  // const onSave = useSaveCallback(editor, "create", () => {});
 
   // load data
   const { data, loading } = useLoadData();
@@ -85,9 +85,9 @@ function Demo() {
               );
             })}
         </div>
-        <Button fullWidth disabled={disabled} onClick={onSave}>
+        {/* <Button fullWidth disabled={disabled} onClick={onSave}>
           Đăng
-        </Button>
+        </Button> */}
       </div>
       <div>POST</div>
     </div>

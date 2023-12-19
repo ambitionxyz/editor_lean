@@ -83,18 +83,21 @@ function List() {
   if (loading === true) {
     return <div className="text-center uppercase ">Loading...</div>;
   }
-  if (listPost.length === 0 && loading === false) {
+  if (listPost.length === 0) {
     return <div className="text-center uppercase ">No content.</div>;
   }
+  const listRender = listPost.data.slice().reverse();
+
   return (
     <>
-      {listPost.data.reverse().map((post: any, index: number) => {
-        const { createTime, image, content } = post.attributes;
+      {listRender.map((post: any, index: number) => {
+        const { createTime, images, content } = post.attributes;
+
         return (
           <Post
             key={index}
             avartar={data.avartar}
-            image="https://tooys.mx/media/catalog/product/cache/39c7ff5a74bd9fa282a021db605b774d/i/t/itachi-uchiha__estatua-por-espada-art-00.jpg"
+            images={images}
             name={data.name}
             createTime={createTime}
             content={content}

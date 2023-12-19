@@ -25,10 +25,11 @@ export const useEditor = (
   useEffect(() => {
     // create instance
     const editor = new EditorJS({
-      holder: "editorjs2",
+      holder: "editorjs",
       tools: toolsList,
       data: data || {},
       initialBlock: "paragraph",
+
       ...editorOptions,
     });
 
@@ -52,7 +53,6 @@ export const useEditor = (
     }
     // Send instance to the parent
     if (editorRef) {
-      console.log("editorRef", { editorInstance });
       editorRef(editorInstance);
     }
   }, [editorInstance, editorRef]);
@@ -71,11 +71,11 @@ export const EditorContainer = ({
   data: any;
   options: any;
 }) => {
-  useEditor(tools, { data, editorRef }, options);
+  const editor = useEditor(tools, { data, editorRef }, options);
 
   return (
     <>
-      {!children && <div className={classes.sessions} id="editorjs2"></div>}
+      {!children && <div className={classes.sessions} id="editorjs"></div>}
       {children}
     </>
   );

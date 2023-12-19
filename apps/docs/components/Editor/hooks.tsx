@@ -14,39 +14,59 @@ export const useSaveCallback = (editor: any, type: SaveType, callBack: any) => {
   const { onClose } = useModal();
 
   return useCallback(async () => {
-    if (!editor) return;
+    if (!editor) {
+      return;
+    }
     try {
       const out = await editor.save();
-      const currenTime = new Date().toLocaleTimeString();
-      console.group("EDITOR onSave");
-      console.dir(out);
+      console.log(out);
 
       if (out.blocks.length === 0) {
         onClose();
         return;
+      } else {
+        const currenTime = new Date().toLocaleTimeString();
+        let images: any[] = [];
+        let content = null;
+
+        out.blocks.forEach((item: any) => {
+          if (item.type === "paragraph") {
+            content = item.data.text;
+          }
+          if (item.type === "postTool") {
+            // images = [...images, item.data.file.url];
+            item.data.file.map((image: any) => {
+              images.push(image.url);
+            });
+            // images.push(item.data.file.url);
+          }
+        });
+
+        const dataPost = {
+          createTime: currenTime,
+          content: content,
+          images: images,
+        };
+
+        const res = await fetch("http://localhost:1337/api/posts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: dataPost,
+            meta: {},
+          }),
+        });
+
+        if (!res.ok) {
+          console.log("ERRORR POST");
+        }
+        const data = await res.json();
+
+        callBack(data.data);
       }
 
-      const dataPost = {
-        createTime: currenTime,
-        content: out.blocks[0].data.text,
-      };
-
-      const res = await fetch("http://localhost:1337/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: dataPost,
-          meta: {},
-        }),
-      });
-
-      if (!res.ok) {
-        console.log("ERRORR POST");
-      }
-      const data = await res.json();
-      callBack(data.data);
       onClose();
     } catch (e) {
       console.error("SAVE RESULT failed", e);

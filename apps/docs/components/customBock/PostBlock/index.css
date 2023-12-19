@@ -1,0 +1,67 @@
+.codex-editor {
+  height: 100%;
+}
+
+.codex-editor--narrow .codex-editor__redactor {
+  height: 100%;
+  margin: 0;
+  padding: 0 !important;
+  z-index: 0;
+  box-sizing: border-box;
+}
+.ce-block {
+}
+/* or */
+.ce-block__content {
+}
+/* or */
+.cdx-block {
+}
+
+.cdx-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: #828282;
+  height: 327px;
+  color: #ffff;
+  /* position: absolute; */
+  /* width: 326px; */
+  /* position: absolute;
+    width: 100px;
+    height: 40px;
+    top: 7px;
+    right: 269px; */
+}
+
+.cdx-button:hover {
+  background-color: #b8b8b8;
+}
+
+.image-tool__image-picture {
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: 96%;
+  margin: 10px;
+  object-fit: cover;
+}
+
+.image-tool {
+  position: relative;
+  border: 1px solid #fff;
+  border-radius: 10px;
+}
+
+.image-tool--filled .cdx-button {
+  background-color: #fff;
+  position: absolute;
+  width: 326px;
+  position: absolute;
+  width: 100px;
+  height: 40px;
+  top: 7px;
+  right: 269px;
+  color: #000;
+}

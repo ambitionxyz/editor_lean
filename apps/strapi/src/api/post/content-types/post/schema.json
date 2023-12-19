@@ -17,6 +17,9 @@
     },
     "content": {
       "type": "json"
+    },
+    "images": {
+      "type": "json"
     }
   }
 }

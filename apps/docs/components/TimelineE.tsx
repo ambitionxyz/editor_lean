@@ -28,7 +28,7 @@ const TimelineE = () => {
   const [editor, setEditor] = useState(null);
 
   // save handler
-  const onSave = useSaveCallback(editor);
+  // const onSave = useSaveCallback(editor);
 
   // load data
   const { data, loading } = useLoadData();
@@ -51,14 +51,14 @@ const TimelineE = () => {
         )}
 
         <div className={classes.button}>
-          <Button
+          {/* <Button
             loading={disabled}
             onClick={onSave}
             variant="gradient"
             gradient={{ from: "violet", to: "orange", deg: 181 }}
           >
             Save
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

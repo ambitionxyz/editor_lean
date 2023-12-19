@@ -3,6 +3,8 @@
 
 module.exports = {
   plugins: {
+    "postcss-nested-ancestors": {},
+    "postcss-nested": {},
     "postcss-import": {},
     "tailwindcss/nesting": {},
     tailwindcss: {},

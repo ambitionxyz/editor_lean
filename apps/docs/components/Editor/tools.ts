@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import SimpleImage from "@editorjs/simple-image";
 import Quote from "@editorjs/quote";
 import List from "@editorjs/list";
@@ -6,12 +8,55 @@ import ImageTool from "@editorjs/image";
 import Embed from "@editorjs/embed";
 import Paragraph from "@editorjs/paragraph";
 import { TimeLineBlock } from "../customBock/TimeLineBlock";
-import axios from "axios";
+import PostTool from "../customBock/PostBlock";
 
 export const tools = {
   paragraph: {
     class: Paragraph,
     inlineToolbar: true,
+  },
+  postTool: {
+    class: PostTool,
+    config: {
+      uploader: {
+        uploadByFile(file: any) {
+          let formData = new FormData();
+          formData.append("files", file, file);
+
+          return axios
+            .post("http://localhost:1337/api/upload", formData)
+            .then((response) => {
+              //after success
+              const url = response.data[0].url;
+              return {
+                success: 1,
+                file: {
+                  url: "http://localhost:1337" + url,
+                },
+              };
+            })
+            .catch((error) => {
+              //handle error
+              console.log("error", error);
+              return error;
+            });
+        },
+
+        async uploadByUrl(url: any) {
+          await axios
+            .post("http://localhost:1337/api/upload", url)
+            .then((response) => {
+              console.log(response);
+              return {
+                success: 1,
+                file: {
+                  url: "http://localhost:1337" + url,
+                },
+              };
+            });
+        },
+      },
+    },
   },
   // simpleImage: SimpleImage,
   // quote: Quote,
@@ -21,52 +66,31 @@ export const tools = {
   // },
   // list: List,
   // linkTool: LinkTool,
-  imageTool: {
-    class: ImageTool,
-    config: {
-      uploader: {
-        uploadByFile(file: any) {
-          console.log(file);
-          let formData = new FormData();
-          formData.append("files", file, file);
+  // imageTool: {
+  //   class: ImageTool,
+  // config: {
+  //   uploader: {
+  //     uploadByFile(file: any) {
+  //       console.log(file);
+  //       let formData = new FormData();
+  //       formData.append("files", file, file);
 
-          axios
-            .post("http://localhost:1337/upload", formData)
-            .then((response) => {
-              //after success
-              console.log("data", response);
-            })
-            .catch((error) => {
-              //handle error
-              console.log("data", error);
-            });
-
-          // return fetch("http://localhost:1337/uploads", {
-          //   headers: {
-          //     // "Content-Type": "application/json",
-          //     "Content-Type": "application/x-www-form-urlencoded",
-          //   },
-          //   method: "POST",
-          //   body: formData,
-          // })
-          //   .then((res) => {
-          //     return res.json();
-          //   })
-          //   .then((data) => {
-          //     console.log("data", data);
-          //     return {
-          //       success: 1,
-          //       file: {
-          //         url: "https://utfs.io/f/",
-          //       },
-          //     };
-          //   });
-        },
-      },
-    },
-  },
+  //       axios
+  //         .post("http://localhost:1337/upload", formData)
+  //         .then((response) => {
+  //           //after success
+  //           console.log("data", response);
+  //         })
+  //         .catch((error) => {
+  //           //handle error
+  //           console.log("data", error);
+  //         });
+  //     },
+  //   },
+  // },
+  // },
   // embed: Embed,
-  timeline: TimeLineBlock,
+  // timeline: TimeLineBlock,
   // paragraph: CustomParap,
   // image: CustomImage,
   // block: CustomeBlock,
