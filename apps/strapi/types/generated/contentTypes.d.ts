@@ -757,6 +757,38 @@ export interface ApiPostPost extends Schema.CollectionType {
   };
 }
 
+export interface ApiPost2Post2 extends Schema.CollectionType {
+  collectionName: 'post2s';
+  info: {
+    singularName: 'post2';
+    pluralName: 'post2s';
+    displayName: 'Post2';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    version: Attribute.String;
+    blocks: Attribute.JSON;
+    time: Attribute.BigInteger;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::post2.post2',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::post2.post2',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -776,6 +808,7 @@ declare module '@strapi/types' {
       'api::component.component': ApiComponentComponent;
       'api::demo.demo': ApiDemoDemo;
       'api::post.post': ApiPostPost;
+      'api::post2.post2': ApiPost2Post2;
     }
   }
 }
