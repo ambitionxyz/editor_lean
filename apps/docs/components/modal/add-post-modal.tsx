@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   options,
   useClearDataCallback,
+  // useHandleEvents,
   useLoadData,
   useSaveCallback,
   useSetData,
@@ -26,8 +27,8 @@ const Editor = dynamic<{
 });
 
 const AddPostModal = () => {
-  const inputRef = useRef<any>(null);
-  const [isShowImage, setShowImage] = useState<boolean>(false);
+  console.log("render");
+  const btnShowImage = useRef<any>(null);
   const [image, SetImage] = useState<{
     id: number;
     url: string;
@@ -35,36 +36,24 @@ const AddPostModal = () => {
   const [editor, setEditor] = useState(null);
 
   const { data: dataModal, isOpen, onClose, type, onOpen } = useModal();
-  const { data } = useData();
+  const { data, onChangeData } = useData();
   const { avartar, name } = dataModal;
-  const { onChangeData } = useData();
 
   const isModalOpen = isOpen && type === "createPost";
-
-  const uploadImage = async (e: any) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("files", e.target.files[0]);
-
-    axios
-      .post("http://localhost:1337/api/upload", formData)
-      .then((response) => {
-        //after success
-        console.log(response);
-        const { id, url } = response.data[0];
-        SetImage({ id, url: "http://localhost:1337" + url });
-      })
-      .catch((error) => {
-        console.log(error);
-        //handle error
-      });
-  };
 
   const callBack = (dataCallback: any) => {
     data.data.push(dataCallback);
     onChangeData(data);
   };
+
+  const show = useCallback(() => {
+    console.log("--whuy", btnShowImage.current);
+    const customData = {};
+    const event = new CustomEvent("showBtn", {
+      detail: customData,
+    });
+    window.dispatchEvent(event); // Kích hoạt sự kiện
+  }, []);
 
   // save handler
   const onSave = useSaveCallback(editor, "create", callBack);
@@ -103,46 +92,12 @@ const AddPostModal = () => {
             </div>
           </div>
           <div className="w-full h-full">
-            <div className=" w-full ">
-              {Editor && (
-                <Editor
-                  editorRef={setEditor}
-                  options={options}
-                  data={null}
-                ></Editor>
-              )}
-            </div>
-
-            {!isShowImage ? (
-              <div className=" flex h-[39.08px]">
-                {/* <div className="flex-1">change background</div> */}
-                {/* <div className="w-[36px] h-[36px] flex items-center cursor-pointer justify-center overflow-hidden rounded-full hover:bg-slate-800">
-                <Smile />
-              </div> */}
-              </div>
-            ) : (
-              <div className=" flex h-[293px]  border-solid rounded-lg border-[1px] border-slate-500  p-4 ">
-                <div className="flex items-center mx-auto w-full h-full hover:bg-slate-700 rounded-lg">
-                  {image ? (
-                    <img
-                      id="preview"
-                      className="object-cover h-full w-full"
-                      src={image.url}
-                      alt="avatar"
-                    />
-                  ) : (
-                    <div className="w-full h-full" contentEditable="true">
-                      <input
-                        id="file_input"
-                        ref={inputRef}
-                        type="file"
-                        onChange={(e) => uploadImage(e)}
-                        className="opacity-0 block w-full h-full rounded-lg "
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
+            {Editor && (
+              <Editor
+                editorRef={setEditor}
+                options={options}
+                data={null}
+              ></Editor>
             )}
           </div>
 
@@ -150,7 +105,10 @@ const AddPostModal = () => {
             <div className="px-2">Thêm vào bài viết của bạn</div>
             <div className="w-[240px] h-[36px] flex gap-x-1">
               <div
-                onClick={() => setShowImage(true)}
+                ref={btnShowImage}
+                onClick={() => {
+                  show();
+                }}
                 className="flex items-center cursor-pointer justify-center h-full w-[36px] overflow-hidden rounded-full hover:bg-slate-800 "
               >
                 <Image color="#14a800" />

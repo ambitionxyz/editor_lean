@@ -50,6 +50,8 @@ export default class PostTool {
   uploader: Uploader;
   ui: Ui;
   private _data: any;
+  eventShowImage: any;
+  events: any;
 
   static get toolbox() {
     return {
@@ -124,6 +126,16 @@ export default class PostTool {
      */
     this._data = {};
     this.data = data;
+
+    this.events = this.handleExternalMessage.bind(this);
+
+    this.api.listeners.on(window, "showBtn", this.events);
+  }
+
+  handleExternalMessage(event: any) {
+    this.api.blocks.insert("postTool");
+    const currenBlockIsEmpty = this.getCurentBlock();
+    window.removeEventListener("showBtn", this.events);
   }
 
   /**
@@ -209,19 +221,20 @@ export default class PostTool {
   }
 
   isFirstBlock() {
-    return this.api.blocks.getCurrentBlockIndex() === 0;
+    return this.getCurentBlock() === 0;
+  }
+  getCurentBlock() {
+    return this.api.blocks.getCurrentBlockIndex();
   }
 
   // rendered() {
   //   this.ui.nodes.fileButton.click();
   // }
 
-  rendered() {}
-
   async onPaste(event: any) {
+    event.preventDefault();
     if (this.isFirstBlock()) {
-      this.api.blocks.insertNewBlock();
-      this.api.blocks.swap(0, 1);
+      // this.api.blocks.insertNewBlock();
     }
 
     switch (event.type) {
@@ -317,6 +330,7 @@ export default class PostTool {
     this.uploader.uploadByFile(file, {
       onPreview: (src: any) => {
         this.ui.showPreloader(src);
+        this.api.blocks.insertNewBlock();
       },
     });
   }

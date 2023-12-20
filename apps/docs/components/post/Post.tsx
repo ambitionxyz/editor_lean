@@ -3,21 +3,20 @@ import Image from "next/image";
 
 interface PostProps {
   avartar?: string;
-  images?: any;
+  blocks: any[];
   name?: string;
-  createTime?: string;
-  content?: string;
+  createTime: string;
 }
 
-const ImageList = ({ images }: { images: any[] }) => {
-  if (images.length === 0) {
+const ImageList = ({ file }: any) => {
+  if (file.length === 0) {
     return <></>;
-  } else if (images.length === 1) {
+  } else if (file.length === 1) {
     return (
       <div className="overflow-hidden pt-[12px]">
         <img
           className="object-fill  h-full w-full"
-          src={images[0]}
+          src={file[0].url}
           alt="image"
         />
       </div>
@@ -25,12 +24,12 @@ const ImageList = ({ images }: { images: any[] }) => {
   } else {
     return (
       <div className="overflow-hidden pt-[12px]">
-        {images.map((image, key) => {
+        {file.map((image: any, key: number) => {
           return (
             <img
               key={key}
               className="object-fill  h-full w-full"
-              src={image}
+              src={image.url}
               alt="image"
             />
           );
@@ -40,7 +39,26 @@ const ImageList = ({ images }: { images: any[] }) => {
   }
 };
 
-const Post = ({ avartar, images, name, content, createTime }: PostProps) => {
+const RenderContent = ({ blocks }: { blocks: any[] }) => {
+  return blocks.map((block, index) => {
+    if (block.type === "postTool") {
+      return <ImageList file={block.data.file} />;
+    }
+    if (block.type === "paragraph") {
+      return <div className="pt-[12px] px-[16px]">{block.data.text}</div>;
+    }
+  });
+};
+
+const Post = ({ avartar, blocks, name, createTime }: PostProps) => {
+  const date = new Date(createTime);
+  const day = date.getUTCDate();
+  const month = date.getUTCMonth() + 1;
+  const hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes();
+
+  const formattedDate: string = `${day} tháng ${month} lúc ${hours}:${minutes}`;
+
   return (
     <div className="rounded-md w-full  bg-slate-600 mb-6">
       <div className=" h-[36px] w-full pt-[12px] px-[16px] mb-[12px]">
@@ -59,7 +77,7 @@ const Post = ({ avartar, images, name, content, createTime }: PostProps) => {
                   {name}
                 </span>
               </a>
-              <span className="text-sm leading-none">{createTime}</span>
+              <span className="text-sm leading-none">{formattedDate}</span>
             </div>
           </div>
           <div className="flex gap-x-1 ">
@@ -72,8 +90,7 @@ const Post = ({ avartar, images, name, content, createTime }: PostProps) => {
           </div>
         </div>
       </div>
-      {content && <div className="pt-[12px] px-[16px]">{content}</div>}
-      <ImageList images={images} />
+      <RenderContent blocks={blocks} />
     </div>
   );
 };

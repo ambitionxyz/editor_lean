@@ -4,8 +4,15 @@ import { Video, Image, Smile } from "lucide-react";
 import { useModal } from "../../hooks/useModal";
 
 const AddPost = () => {
-  const { data, onOpen } = useModal();
+  const { onOpen } = useModal();
+  const data = {
+    avartar:
+      "https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-08.jpg",
+    name: "Hôm nào cũng buồn",
+  };
   const { name, avartar } = data;
+
+  console.log("Addpostt");
   return (
     <div className="rounded-md w-full bg-slate-600 mt-6  pt-[12px] px-[16px] pb-[10px]">
       <div className="flex gap-x-2 w-full ">

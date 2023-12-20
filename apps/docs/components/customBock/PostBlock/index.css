@@ -27,13 +27,6 @@
   background-color: #828282;
   height: 327px;
   color: #ffff;
-  /* position: absolute; */
-  /* width: 326px; */
-  /* position: absolute;
-    width: 100px;
-    height: 40px;
-    top: 7px;
-    right: 269px; */
 }
 
 .cdx-button:hover {
@@ -55,6 +48,7 @@
 }
 
 .image-tool--filled .cdx-button {
+  display: none;
   background-color: #fff;
   position: absolute;
   width: 326px;
@@ -64,4 +58,26 @@
   top: 7px;
   right: 269px;
   color: #000;
+}
+
+.image-tool--filled:hover .cdx-button {
+  display: block;
+}
+
+.button-close {
+  cursor: pointer;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  background-color: rgb(237, 234, 234);
+  top: 30px;
+  right: 23px;
+  border-radius: 50%;
+}
+
+.wrapper--close {
+  display: none;
 }

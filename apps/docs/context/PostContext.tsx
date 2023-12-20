@@ -19,12 +19,13 @@ function PostListContent(props: any) {
     const fetchData = async () => {
       console.log("Fetching data");
       SetLoading(true);
-      const res = await fetch("http://localhost:1337/api/posts");
+      const res = await fetch("http://localhost:1337/api/post2s");
 
       if (!res.ok) {
         console.log("ERROR FETCH DATA");
       } else {
         const data = await res.json();
+        console.log(data);
         if (data.data.length > 0) {
           onChangeData(data);
         }
@@ -88,19 +89,20 @@ function List() {
   }
   const listRender = listPost.data.slice().reverse();
 
+  console.log({ listRender });
+
   return (
     <>
       {listRender.map((post: any, index: number) => {
-        const { createTime, images, content } = post.attributes;
+        const { createdAt, blocks } = post.attributes;
 
         return (
           <Post
             key={index}
             avartar={data.avartar}
-            images={images}
+            blocks={blocks}
             name={data.name}
-            createTime={createTime}
-            content={content}
+            createTime={createdAt}
           />
         );
       })}

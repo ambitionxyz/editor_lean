@@ -1,5 +1,5 @@
 // import { IconPicture } from "@codexteam/icons";
-import { IconPicture } from "@codexteam/icons";
+import { IconPicture, IconCross } from "@codexteam/icons";
 import { make } from "./utils/dom";
 
 /**
@@ -19,12 +19,14 @@ export default class Ui {
   api: any;
   config: any;
   numberBlocks: any;
+  destroyEvent: any;
   onSelectFile: any;
   readOnly: any;
   nodes: {
     wrapper: any;
     imageContainer: any;
     fileButton: any;
+    closeButton: any;
     imageEl: any;
     imagePreloader: any;
     // caption: any;
@@ -59,6 +61,7 @@ export default class Ui {
       ]),
       imageContainer: make("div", [this.CSS.imageContainer]),
       fileButton: this.createFileButton(),
+      closeButton: this.createCloseButton(),
       imageEl: undefined,
       imagePreloader: make("div", this.CSS.imagePreloader),
       // caption: make("div", [this.CSS.input, this.CSS.caption], {
@@ -78,12 +81,13 @@ export default class Ui {
      */
     // this.nodes.caption.dataset.placeholder = this.config.captionPlaceholder;
     this.nodes.imageContainer.appendChild(this.nodes.imagePreloader);
+    this.nodes.imageContainer.appendChild(this.nodes.closeButton);
     this.nodes.wrapper.appendChild(this.nodes.imageContainer);
     // this.nodes.wrapper.appendChild(this.nodes.caption);
 
-    if (this.numberBlocks === 1) {
-      this.nodes.wrapper.appendChild(this.nodes.fileButton);
-    }
+    // if (this.numberBlocks === 1) {
+    this.nodes.wrapper.appendChild(this.nodes.fileButton);
+    // }
   }
 
   /**
@@ -106,6 +110,7 @@ export default class Ui {
       imagePreloader: "image-tool__image-preloader",
       imageEl: "image-tool__image-picture",
       caption: "image-tool__caption",
+      buttonClose: "button-close",
     };
   }
 
@@ -155,6 +160,18 @@ export default class Ui {
     button.addEventListener("click", () => {
       this.onSelectFile();
     });
+    return button;
+  }
+
+  createCloseButton() {
+    const button = make("div", [this.CSS.buttonClose]);
+    button.innerHTML = IconCross;
+    button.addEventListener("click", () => {
+      console.log("click xoa n");
+      const indexCurrentBlock = this.api.blocks.getCurrentBlockIndex();
+      this.api.blocks.delete(indexCurrentBlock);
+    });
+
     return button;
   }
 
