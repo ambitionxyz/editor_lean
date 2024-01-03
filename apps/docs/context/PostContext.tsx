@@ -8,38 +8,40 @@ import { useData } from "../hooks/useData";
 const PostContext = createContext<any>([]);
 
 function PostListContent(props: any) {
-  const [loading, SetLoading] = useState(false);
-  const [open, toggle] = useState(false);
+  const [loading, SetLoading] = useState("idle");
   const [remove, setRemove] = useState();
   const [listPost, setListPost] = useState<[] | undefined>([]);
 
   const { onChangeData } = useData();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log("Fetching data");
-      SetLoading(true);
+  const fetchData = async () => {
+    console.log("Fetching data");
+    try {
+      SetLoading("pending");
       const res = await fetch("http://localhost:1337/api/post2s");
-
+      SetLoading("successfully");
       if (!res.ok) {
         console.log("ERROR FETCH DATA");
+        SetLoading("rejected");
       } else {
         const data = await res.json();
-        console.log(data);
         if (data.data.length > 0) {
           onChangeData(data);
         }
       }
-      SetLoading(false);
-    };
+    } catch (error) {
+      console.log("ERROR FETCH DATA");
+      SetLoading("rejected");
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <PostContext.Provider
       value={{
-        open,
-        toggle,
         remove,
         setRemove,
         listPost,
@@ -52,53 +54,33 @@ function PostListContent(props: any) {
   );
 }
 
-function Button(props: any) {
-  const Icon = props.icon;
-  return (
-    <button>
-      <Icon />
-    </button>
-  );
-}
-
-function GroupButton() {
-  const { open, toggle } = useContext(PostContext);
-  const { remove, setRemove } = useContext(PostContext);
-  return (
-    <div className="flex">
-      <div onClick={() => toggle(!open)}>
-        <Button icon={MoreHorizontal} />
-      </div>
-      <div onClick={() => setRemove("dem")}>
-        <Button icon={MoreHorizontal} />
-      </div>
-    </div>
-  );
-}
-
 function List() {
   const { loading } = useContext(PostContext);
   const { data } = useModal();
   const { data: listPost } = useData();
 
-  if (loading === true) {
+  if (loading === "pending" || loading === "idle") {
     return <div className="text-center uppercase ">Loading...</div>;
   }
   if (listPost.length === 0) {
     return <div className="text-center uppercase ">No content.</div>;
   }
+  if (loading === "rejected") {
+    return (
+      <div className="text-center uppercase ">Upps, an error occurred.</div>
+    );
+  }
   const listRender = listPost.data.slice().reverse();
-
-  console.log({ listRender });
 
   return (
     <>
       {listRender.map((post: any, index: number) => {
-        const { createdAt, blocks } = post.attributes;
+        const { createdAt, blocks, bgrColor } = post.attributes;
 
         return (
           <Post
             key={index}
+            bgrColor={bgrColor}
             avartar={data.avartar}
             blocks={blocks}
             name={data.name}
@@ -111,6 +93,5 @@ function List() {
 }
 
 PostListContent.List = List;
-PostListContent.GroupButton = GroupButton;
 
 export default PostListContent;

@@ -12,7 +12,6 @@ const AddPost = () => {
   };
   const { name, avartar } = data;
 
-  console.log("Addpostt");
   return (
     <div className="rounded-md w-full bg-slate-600 mt-6  pt-[12px] px-[16px] pb-[10px]">
       <div className="flex gap-x-2 w-full ">

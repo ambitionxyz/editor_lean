@@ -10,7 +10,12 @@ export const dataKey = "editorData";
 
 type SaveType = "create" | "edit";
 
-export const useSaveCallback = (editor: any, type: SaveType, callBack: any) => {
+export const useSaveCallback = (
+  editor: any,
+  type: SaveType,
+  callBack: any,
+  bgrColor: string
+) => {
   const { onClose } = useModal();
 
   return useCallback(async () => {
@@ -19,42 +24,21 @@ export const useSaveCallback = (editor: any, type: SaveType, callBack: any) => {
     }
     try {
       const out = await editor.save();
+      out.bgrColor = bgrColor;
       console.log(out);
+      console.log({ bgrColor });
 
       if (out.blocks.length === 0) {
         onClose();
         return;
       } else {
-        const currenTime = new Date().toLocaleTimeString();
-        let images: any[] = [];
-        let content = null;
-
-        out.blocks.forEach((item: any) => {
-          if (item.type === "paragraph") {
-            content = item.data.text;
-          }
-          if (item.type === "postTool") {
-            // images = [...images, item.data.file.url];
-            item.data.file.map((image: any) => {
-              images.push(image.url);
-            });
-            // images.push(item.data.file.url);
-          }
-        });
-
-        const dataPost = {
-          createTime: currenTime,
-          content: content,
-          images: images,
-        };
-
-        const res = await fetch("http://localhost:1337/api/posts", {
+        const res = await fetch("http://localhost:1337/api/post2s", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            data: dataPost,
+            data: out,
             meta: {},
           }),
         });

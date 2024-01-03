@@ -75,9 +75,10 @@ function Demo() {
         )}
         <div>
           {navLink &&
-            navLink.map((item) => {
+            navLink.map((item, index) => {
               return (
                 <NavLink
+                  key={index}
                   label={item.label}
                   onClick={item.onCLick}
                   leftSection={item.icon}

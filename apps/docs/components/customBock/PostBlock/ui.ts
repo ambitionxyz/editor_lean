@@ -19,6 +19,7 @@ export default class Ui {
   api: any;
   config: any;
   numberBlocks: any;
+  sendMessage: any;
   destroyEvent: any;
   onSelectFile: any;
   readOnly: any;
@@ -42,16 +43,19 @@ export default class Ui {
     api,
     config,
     numberBlocks,
+    sendMessage,
     onSelectFile,
   }: {
     api: any;
     config: any;
     numberBlocks: any;
+    sendMessage: any;
     onSelectFile: any;
   }) {
     this.api = api;
     this.config = config;
     this.numberBlocks = numberBlocks;
+    this.sendMessage = sendMessage;
     this.onSelectFile = onSelectFile;
     this.nodes = {
       wrapper: make("div", [
@@ -79,15 +83,10 @@ export default class Ui {
      *    <select-file-button />
      *  </wrapper>
      */
-    // this.nodes.caption.dataset.placeholder = this.config.captionPlaceholder;
     this.nodes.imageContainer.appendChild(this.nodes.imagePreloader);
     this.nodes.imageContainer.appendChild(this.nodes.closeButton);
     this.nodes.wrapper.appendChild(this.nodes.imageContainer);
-    // this.nodes.wrapper.appendChild(this.nodes.caption);
-
-    // if (this.numberBlocks === 1) {
     this.nodes.wrapper.appendChild(this.nodes.fileButton);
-    // }
   }
 
   /**
@@ -167,9 +166,9 @@ export default class Ui {
     const button = make("div", [this.CSS.buttonClose]);
     button.innerHTML = IconCross;
     button.addEventListener("click", () => {
-      console.log("click xoa n");
       const indexCurrentBlock = this.api.blocks.getCurrentBlockIndex();
       this.api.blocks.delete(indexCurrentBlock);
+      this.sendMessage("showImage", false);
     });
 
     return button;

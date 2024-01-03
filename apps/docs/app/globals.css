@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .h-screen-minus-50px {
+    height: calc(100vh - 50px);
+  }
+}
+
 :root {
 }
 
@@ -17,7 +23,6 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  
 }
 
 body {

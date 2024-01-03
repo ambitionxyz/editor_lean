@@ -6,8 +6,6 @@ interface DataStore {
 }
 
 export const useData = create<DataStore>((set) => ({
-  data: {
-    data: [],
-  },
+  data: [],
   onChangeData: (data) => set({ data: data }),
 }));

@@ -111,6 +111,7 @@ export default class PostTool {
     this.ui = new Ui({
       api,
       config: this.config,
+      sendMessage: this.sendMessage,
       numberBlocks: this.getNumberBlocks(),
       onSelectFile: () => {
         this.uploader.uploadSelectedFile({
@@ -134,8 +135,15 @@ export default class PostTool {
 
   handleExternalMessage(event: any) {
     this.api.blocks.insert("postTool");
-    const currenBlockIsEmpty = this.getCurentBlock();
     window.removeEventListener("showBtn", this.events);
+    this.sendMessage("showImage", true);
+  }
+
+  sendMessage(eventName: string, data: any) {
+    const event = new CustomEvent(eventName, {
+      detail: data,
+    });
+    window.dispatchEvent(event);
   }
 
   /**
@@ -227,15 +235,8 @@ export default class PostTool {
     return this.api.blocks.getCurrentBlockIndex();
   }
 
-  // rendered() {
-  //   this.ui.nodes.fileButton.click();
-  // }
-
   async onPaste(event: any) {
     event.preventDefault();
-    if (this.isFirstBlock()) {
-      // this.api.blocks.insertNewBlock();
-    }
 
     switch (event.type) {
       case "tag": {
@@ -262,6 +263,7 @@ export default class PostTool {
       case "file": {
         const file = event.detail.file;
         this.uploadFile(file);
+        this.sendMessage("showImage", true);
         break;
       }
     }
@@ -269,9 +271,6 @@ export default class PostTool {
 
   set data(data: any) {
     this.image = data.file;
-
-    // this._data.caption = data.caption || "";
-    // this.ui.fillCaption(this._data.caption);
   }
 
   get data() {

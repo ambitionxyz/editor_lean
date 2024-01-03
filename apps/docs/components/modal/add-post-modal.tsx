@@ -1,20 +1,15 @@
 "use client";
 
-import { Button, FileInput, Modal } from "@mantine/core";
-import { useModal } from "../../hooks/useModal";
-import { Globe, Image, Smile } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  options,
-  useClearDataCallback,
-  // useHandleEvents,
-  useLoadData,
-  useSaveCallback,
-  useSetData,
-} from "../editor";
+import { ChevronRight, Globe, Image } from "lucide-react";
+import { Button, Modal } from "@mantine/core";
+import { twMerge } from "tailwind-merge";
+
+import { useModal } from "../../hooks/useModal";
 import { useData } from "../../hooks/useData";
-import axios from "axios";
+import { options, useSaveCallback } from "../editor";
+import { useToggle } from "@mantine/hooks";
 
 const Editor = dynamic<{
   editorRef: any;
@@ -27,15 +22,13 @@ const Editor = dynamic<{
 });
 
 const AddPostModal = () => {
-  console.log("render");
-  const btnShowImage = useRef<any>(null);
-  const [image, SetImage] = useState<{
-    id: number;
-    url: string;
-  } | null>();
   const [editor, setEditor] = useState(null);
+  const [disableBtn, setDisableBtn] = useState(false);
+  const [brgPost, setBgrPost] = useState<string>("bg-transparent");
+  const [isOpenListBgrPostColor, toggleBgrPostColor] = useToggle([true, false]);
+  const [isShowListBgr, setIsShowListBrn] = useState(true);
 
-  const { data: dataModal, isOpen, onClose, type, onOpen } = useModal();
+  const { data: dataModal, isOpen, onClose, type } = useModal();
   const { data, onChangeData } = useData();
   const { avartar, name } = dataModal;
 
@@ -47,7 +40,7 @@ const AddPostModal = () => {
   };
 
   const show = useCallback(() => {
-    console.log("--whuy", btnShowImage.current);
+    setDisableBtn(true);
     const customData = {};
     const event = new CustomEvent("showBtn", {
       detail: customData,
@@ -55,8 +48,32 @@ const AddPostModal = () => {
     window.dispatchEvent(event); // Kích hoạt sự kiện
   }, []);
 
+  //get event
+  useEffect(() => {
+    const handleGetEventImageFromEditor = (e: any) => {
+      if (!e.detail) {
+        setIsShowListBrn(true);
+      }
+      setDisableBtn(e.detail);
+    };
+
+    window.addEventListener("showImage", handleGetEventImageFromEditor);
+
+    return () => {
+      window.removeEventListener("showImage", handleGetEventImageFromEditor);
+    };
+  }, []);
+
   // save handler
-  const onSave = useSaveCallback(editor, "create", callBack);
+  const onSave = useSaveCallback(editor, "create", callBack, brgPost);
+
+  const listColors = [
+    "bg-transparent",
+    "bg-white",
+    "bg-blue-400",
+    "bg-red-400",
+    "bg-pink-400",
+  ];
 
   return (
     <Modal.Root opened={isModalOpen} onClose={onClose} centered size={500}>
@@ -91,7 +108,8 @@ const AddPostModal = () => {
               </span>
             </div>
           </div>
-          <div className="w-full h-full">
+
+          <div className={`w-full h-full ${brgPost}`}>
             {Editor && (
               <Editor
                 editorRef={setEditor}
@@ -99,35 +117,54 @@ const AddPostModal = () => {
                 data={null}
               ></Editor>
             )}
+
+            {isShowListBgr && (
+              <div className="flex items-end h-[39.41px] gap-x-2">
+                <div
+                  onClick={() => {
+                    toggleBgrPostColor();
+                  }}
+                  className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-400 cursor-pointer border-solid"
+                >
+                  {isOpenListBgrPostColor ? "Aa" : <ChevronRight />}
+                </div>
+                {!isOpenListBgrPostColor &&
+                  listColors.map((color, index) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setBgrPost(color);
+                          if (index === 0) {
+                            setDisableBtn(false);
+                          } else {
+                            setDisableBtn(true);
+                          }
+                        }}
+                        className={`w-8 h-8 rounded-lg ${color} cursor-pointer border-solid`}
+                      />
+                    );
+                  })}
+              </div>
+            )}
           </div>
 
           <div className="h-[58px] flex items-center justify-between border-solid rounded-lg border-[1px] border-slate-500 p-2 mt-4">
             <div className="px-2">Thêm vào bài viết của bạn</div>
             <div className="w-[240px] h-[36px] flex gap-x-1">
-              <div
-                ref={btnShowImage}
+              <button
+                disabled={disableBtn}
                 onClick={() => {
                   show();
+                  setIsShowListBrn(false);
                 }}
-                className="flex items-center cursor-pointer justify-center h-full w-[36px] overflow-hidden rounded-full hover:bg-slate-800 "
+                className={twMerge(
+                  `flex items-center cursor-pointer border-none justify-center h-full w-[36px] overflow-hidden rounded-full bg-slate-800 hover:bg-slate-700 `,
+                  disableBtn && "bg-slate-700"
+                )}
               >
                 <Image color="#14a800" />
-              </div>
-              <div className="flex items-center cursor-pointer justify-center h-full w-[36px] overflow-hidden rounded-full hover:bg-slate-800 ">
-                <Image color="#14a800" />
-              </div>
-              <div className="flex items-center cursor-pointer justify-center h-full w-[36px] overflow-hidden rounded-full hover:bg-slate-800 ">
-                <Image color="#14a800" />
-              </div>
-              <div className="flex items-center cursor-pointer justify-center h-full w-[36px] overflow-hidden rounded-full hover:bg-slate-800 ">
-                <Image color="#14a800" />
-              </div>
-              <div className="flex items-center cursor-pointer justify-center h-full w-[36px] overflow-hidden rounded-full hover:bg-slate-800 ">
-                <Image color="#14a800" />
-              </div>
-              <div className="flex items-center cursor-pointer justify-center h-full w-[36px] overflow-hidden rounded-full hover:bg-slate-800 ">
-                <Image color="#14a800" />
-              </div>
+              </button>
             </div>
           </div>
           <Button fullWidth onClick={onSave} className="mt-4">

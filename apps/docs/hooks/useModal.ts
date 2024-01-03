@@ -3,8 +3,8 @@ import { create } from "zustand";
 export type ModalType = "createPost";
 
 interface ModalData {
-  avartar?: string;
-  name?: string;
+  avartar: string;
+  name: string;
 }
 
 interface ModalStore {

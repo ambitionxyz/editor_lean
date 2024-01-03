@@ -4,7 +4,8 @@
   "info": {
     "singularName": "post2",
     "pluralName": "post2s",
-    "displayName": "Post2"
+    "displayName": "Post2",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -19,6 +20,9 @@
     },
     "time": {
       "type": "biginteger"
+    },
+    "bgrColor": {
+      "type": "string"
     }
   }
 }

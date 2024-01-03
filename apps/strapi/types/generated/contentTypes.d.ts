@@ -763,6 +763,7 @@ export interface ApiPost2Post2 extends Schema.CollectionType {
     singularName: 'post2';
     pluralName: 'post2s';
     displayName: 'Post2';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -771,6 +772,7 @@ export interface ApiPost2Post2 extends Schema.CollectionType {
     version: Attribute.String;
     blocks: Attribute.JSON;
     time: Attribute.BigInteger;
+    bgrColor: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -782,6 +784,37 @@ export interface ApiPost2Post2 extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::post2.post2',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiStoryStory extends Schema.CollectionType {
+  collectionName: 'stories';
+  info: {
+    singularName: 'story';
+    pluralName: 'stories';
+    displayName: 'Story';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    video: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::story.story',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::story.story',
       'oneToOne',
       'admin::user'
     > &
@@ -809,6 +842,7 @@ declare module '@strapi/types' {
       'api::demo.demo': ApiDemoDemo;
       'api::post.post': ApiPostPost;
       'api::post2.post2': ApiPost2Post2;
+      'api::story.story': ApiStoryStory;
     }
   }
 }

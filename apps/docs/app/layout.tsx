@@ -9,6 +9,8 @@ import "@mantine/core/styles.css";
 import "./globals.css";
 import "@uploadthing/react/styles.css";
 import { ModalProvider } from "../components/providers/model-provider";
+import StoryListContent from "../context/StoryContext";
+import CanvasProvider from "../components/canvas/hooks/useCanvas";
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -25,7 +27,8 @@ export default function RootLayout({
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <MantineProvider theme={theme} defaultColorScheme="dark">
           <ModalProvider />
-          {children}
+          {/* {children} */}
+          <CanvasProvider>{children}</CanvasProvider>
         </MantineProvider>
       </body>
     </html>
